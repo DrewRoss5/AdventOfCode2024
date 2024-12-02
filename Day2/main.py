@@ -1,8 +1,10 @@
-# returns true if a list of reports is safe, otherwise false
-def validate(arr: list[int]):
+import copy
+
+# returns a list of indices that are unsafe
+def validate(arr: list[int]) -> bool:
     safe = True
     increasing = (arr[1] > arr[0])
-    print(f"{arr}\nIncreasing: {increasing}")
+    safe = True
     for j in range(1, len(arr)):
         if increasing:
             dif = arr[j] - arr[j - 1]
@@ -10,20 +12,32 @@ def validate(arr: list[int]):
             dif = arr[j - 1] - arr[j]
         if dif < 1 or dif > 3:
             safe = False
+            break
     return safe
         
 
 def main():
     with open('input.txt') as f:
         lines = f.read().splitlines()
-    # part 1
-    count = 0
+    part_one_count = 0
+    part_two_count = 0
     for i in lines:
         arr = [i for i in map(lambda x: int(x), i.split(' '))]
-        if validate(arr):
-            count += 1
-    print(f'Part 1: Count: {count}')
-
+        # check if the array is valid without modification
+        valid = validate(arr)
+        if valid:
+            part_one_count += 1
+            part_two_count += 1
+        # check if removing one element makes the array valid
+        else:
+            for j in range(len(arr)):
+                tmp = copy.deepcopy(arr)
+                tmp.pop(j)
+                if validate(tmp):
+                    part_two_count += 1
+                    break
+                
+    print(f'Part 1 count: {part_one_count}\nPart 2 count {part_two_count}')
 
     
 if __name__ == '__main__':
