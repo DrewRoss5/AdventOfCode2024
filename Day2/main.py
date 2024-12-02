@@ -1,5 +1,3 @@
-import copy
-
 # returns a list of indices that are unsafe
 def validate(arr: list[int]) -> bool:
     safe = True
@@ -31,11 +29,12 @@ def main():
         # check if removing one element makes the array valid
         else:
             for j in range(len(arr)):
-                tmp = copy.deepcopy(arr)
-                tmp.pop(j)
-                if validate(tmp):
+                val = arr[j]
+                arr.pop(j)
+                if validate(arr):
                     part_two_count += 1
                     break
+                arr.insert(j, val)
                 
     print(f'Part 1 count: {part_one_count}\nPart 2 count {part_two_count}')
 
